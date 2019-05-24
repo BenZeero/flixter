@@ -1,7 +1,7 @@
 class Instructor::SectionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_authorized_for_current_course, only: [:create]
-  before_action :require_authorized_for_current_section, only: [:update]
+  before_action :require_authorized_for_current_course, only: [:create, :destroy]
+  before_action :require_authorized_for_current_section, only: [:update, :destroy]
 
 
   def create
@@ -14,6 +14,12 @@ class Instructor::SectionsController < ApplicationController
     render plain: 'update!'
   end
   
+  def destroy
+    @section = current_section
+    @section.destroy
+    redirect_to instructor_course_path(current_course)
+  end
+
   private
 
   def require_authorized_for_current_section
